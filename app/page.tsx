@@ -1,7 +1,25 @@
 "use client";
 
-import type { CSSProperties, MouseEvent } from "react";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
+import type { CSSProperties } from "react";
+
+type BubbleStyle = CSSProperties & {
+  "--size": string;
+  "--left": string;
+  "--time": string;
+  "--delay": string;
+  "--move": string;
+};
+
+const bubbles: BubbleStyle[] = [
+  { "--size": "32px", "--left": "7%", "--time": "9s", "--delay": "-1s", "--move": "34px" },
+  { "--size": "18px", "--left": "17%", "--time": "7s", "--delay": "-4s", "--move": "-28px" },
+  { "--size": "42px", "--left": "77%", "--time": "11s", "--delay": "-2s", "--move": "38px" },
+  { "--size": "14px", "--left": "91%", "--time": "8s", "--delay": "-5s", "--move": "-22px" },
+  { "--size": "25px", "--left": "58%", "--time": "10s", "--delay": "-7s", "--move": "24px" },
+  { "--size": "20px", "--left": "38%", "--time": "12s", "--delay": "-6s", "--move": "-40px" },
+  { "--size": "15px", "--left": "68%", "--time": "8s", "--delay": "-3s", "--move": "22px" },
+];
 
 export default function WaterLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,59 +36,83 @@ export default function WaterLoginPage() {
     ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
     ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
     element.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 760);
 
-    setTimeout(() => ripple.remove(), 700);
-
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 12; i++) {
       const drop = document.createElement("span");
       drop.className = "drop";
       drop.style.left = `${event.clientX}px`;
       drop.style.top = `${event.clientY}px`;
 
       const angle = Math.random() * Math.PI * 2;
-      const distance = 25 + Math.random() * 45;
+      const distance = 28 + Math.random() * 70;
       drop.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
       drop.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
 
       document.body.appendChild(drop);
-      setTimeout(() => drop.remove(), 700);
+      setTimeout(() => drop.remove(), 850);
     }
   };
 
   const tiltCard = (event: MouseEvent<HTMLElement>) => {
     const card = event.currentTarget;
-    const x = (window.innerWidth / 2 - event.clientX) / 45;
-    const y = (window.innerHeight / 2 - event.clientY) / 45;
-    card.style.transform = `translateY(-8px) rotateX(${y}deg) rotateY(${-x}deg)`;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left - rect.width / 2) / 26;
+    const y = (event.clientY - rect.top - rect.height / 2) / 30;
+    card.style.transform = `translateY(-10px) rotateX(${-y}deg) rotateY(${x}deg)`;
   };
 
   const resetTilt = (event: MouseEvent<HTMLElement>) => {
-    event.currentTarget.style.transform = "rotateX(4deg) rotateY(-4deg)";
+    event.currentTarget.style.transform = "translateY(0) rotateX(5deg) rotateY(-6deg)";
   };
 
   return (
     <main className="water-login-page">
+      <div className="sky-orbs" aria-hidden="true">
+        <span className="orb orb-one" />
+        <span className="orb orb-two" />
+        <span className="orb orb-three" />
+      </div>
+
       <div className="ocean" aria-hidden="true">
-        <div className="bubble" style={{ "--size": "28px", "--left": "8%", "--time": "9s", "--delay": "-1s", "--move": "34px" } as CSSProperties} />
-        <div className="bubble" style={{ "--size": "18px", "--left": "18%", "--time": "7s", "--delay": "-4s", "--move": "-28px" } as CSSProperties} />
-        <div className="bubble" style={{ "--size": "36px", "--left": "77%", "--time": "11s", "--delay": "-2s", "--move": "38px" } as CSSProperties} />
-        <div className="bubble" style={{ "--size": "14px", "--left": "90%", "--time": "8s", "--delay": "-5s", "--move": "-22px" } as CSSProperties} />
-        <div className="bubble" style={{ "--size": "22px", "--left": "58%", "--time": "10s", "--delay": "-7s", "--move": "24px" } as CSSProperties} />
-        <div className="wave" />
-        <div className="wave two" />
+        {bubbles.map((bubble, index) => (
+          <span key={index} className="bubble" style={bubble} />
+        ))}
+
+        <span className="fish fish-one">◆</span>
+        <span className="fish fish-two">◆</span>
+        <span className="fish fish-three">◆</span>
+
+        <div className="crystal crystal-one" />
+        <div className="crystal crystal-two" />
+        <div className="crystal crystal-three" />
+
+        <div className="wave wave-one" />
+        <div className="wave wave-two" />
+        <div className="wave wave-three" />
         <div className="water-surface" />
       </div>
 
-      <section className="login-wrap" onMouseMove={tiltCard} onMouseLeave={resetTilt}>
-        <div className="water-logo">
-          <div className="splash-ring" />
+      <section className="phone-shell" onMouseMove={tiltCard} onMouseLeave={resetTilt}>
+        <div className="phone-reflection" />
+        <div className="notch" />
+
+        <div className="premium-badge">
+          <span className="badge-dot" />
+          3D Secure Login
+        </div>
+
+        <div className="water-logo" onClick={createWaterEffect}>
+          <div className="logo-core" />
+          <div className="splash-ring ring-one" />
+          <div className="splash-ring ring-two" />
         </div>
 
         <h1 className="title">Welcome Back</h1>
         <p className="subtitle">
-          Login to continue your journey
+          Smooth liquid glass UI with
           <br />
-          with smooth water feeling.
+          animated 3D water feeling.
         </p>
 
         <form className="form">
@@ -80,6 +122,7 @@ export default function WaterLoginPage() {
               <circle cx="12" cy="7" r="4" />
             </svg>
             <input type="text" placeholder="Username or Email" />
+            <span className="field-shine" />
           </div>
 
           <div className="field liquid-click" onClick={createWaterEffect}>
@@ -104,6 +147,7 @@ export default function WaterLoginPage() {
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </button>
+            <span className="field-shine" />
           </div>
 
           <div className="options">
@@ -112,16 +156,17 @@ export default function WaterLoginPage() {
               <span>Remember me</span>
             </label>
             <a className="forgot" href="#">
-              Forgot Password?
+              Forgot?
             </a>
           </div>
 
           <button className="login-btn liquid-click" type="button" onClick={createWaterEffect}>
-            <span>Login</span>
+            <span>Login Now</span>
             <div className="btn-wave" />
+            <div className="btn-light" />
           </button>
 
-          <div className="divider">or</div>
+          <div className="divider">continue with</div>
 
           <div className="socials">
             <button className="social-btn liquid-click" type="button" onClick={createWaterEffect}>G</button>
@@ -130,7 +175,7 @@ export default function WaterLoginPage() {
           </div>
 
           <p className="signup">
-            Don’t have an account? <a href="#">Sign Up</a>
+            New user? <a href="#">Create account</a>
           </p>
         </form>
       </section>
