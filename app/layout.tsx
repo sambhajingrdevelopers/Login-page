@@ -1,16 +1,13 @@
-import type { Metadata } from "next";
-import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Advanced 3D Water Login",
-  description: "Advanced animated 3D water glass login page",
+export const metadata = {
+  title: "3D Water Login",
+  description: "3D animated water login page",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>{children}</body>
