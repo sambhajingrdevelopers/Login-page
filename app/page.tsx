@@ -2,8 +2,50 @@
 
 import { MouseEvent, useState } from "react";
 
+const loginPages = [
+  {
+    theme: "water",
+    badge: "3D Water Login",
+    title: "Welcome Back",
+    subtitle: "Smooth liquid glass login experience",
+    logo: "💧",
+    button: "Login Now",
+  },
+  {
+    theme: "neon",
+    badge: "Cyber Login",
+    title: "Access Portal",
+    subtitle: "Neon futuristic security interface",
+    logo: "⚡",
+    button: "Enter System",
+  },
+  {
+    theme: "royal",
+    badge: "Royal Secure",
+    title: "Royal Login",
+    subtitle: "Premium golden glass login page",
+    logo: "👑",
+    button: "Continue",
+  },
+  {
+    theme: "space",
+    badge: "Space Login",
+    title: "Galaxy Access",
+    subtitle: "Animated space style login screen",
+    logo: "🚀",
+    button: "Launch Login",
+  },
+];
+
 export default function Page() {
+  const [pageIndex, setPageIndex] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
+
+  const page = loginPages[pageIndex];
+
+  function nextPage() {
+    setPageIndex((prev) => (prev + 1) % loginPages.length);
+  }
 
   function waterClick(e: MouseEvent<HTMLElement>) {
     const el = e.currentTarget;
@@ -16,13 +58,22 @@ export default function Page() {
     ripple.style.height = size + "px";
     ripple.style.left = e.clientX - rect.left - size / 2 + "px";
     ripple.style.top = e.clientY - rect.top - size / 2 + "px";
+
     el.appendChild(ripple);
     setTimeout(() => ripple.remove(), 700);
   }
 
   return (
     <>
-      <main className="page">
+      <main className={`page ${page.theme}`}>
+        <button className="nextBtn" onClick={nextPage}>
+          Next →
+        </button>
+
+        <div className="counter">
+          {pageIndex + 1} / {loginPages.length}
+        </div>
+
         <div className="bg">
           <span className="orb orb1"></span>
           <span className="orb orb2"></span>
@@ -34,31 +85,32 @@ export default function Page() {
           <span className="bubble b4"></span>
           <span className="bubble b5"></span>
 
-          <span className="fish fish1">◆</span>
-          <span className="fish fish2">◆</span>
+          <span className="shape s1"></span>
+          <span className="shape s2"></span>
+          <span className="shape s3"></span>
 
           <div className="wave wave1"></div>
           <div className="wave wave2"></div>
           <div className="water"></div>
         </div>
 
-        <section className="card">
+        <section key={page.theme} className="card">
           <div className="shine"></div>
           <div className="notch"></div>
 
           <div className="badge">
             <span></span>
-            3D Water Login
+            {page.badge}
           </div>
 
           <button className="logo" onClick={waterClick} type="button">
-            <div className="dropLogo"></div>
+            <span className="logoIcon">{page.logo}</span>
             <div className="ring ring1"></div>
             <div className="ring ring2"></div>
           </button>
 
-          <h1>Welcome Back</h1>
-          <p className="sub">Login with smooth liquid glass feeling</p>
+          <h1>{page.title}</h1>
+          <p className="sub">{page.subtitle}</p>
 
           <form>
             <div className="inputBox" onClick={waterClick}>
@@ -92,7 +144,7 @@ export default function Page() {
             </div>
 
             <button type="button" className="login" onClick={waterClick}>
-              <span>Login Now</span>
+              <span>{page.button}</span>
               <div className="liquid"></div>
             </button>
 
@@ -135,11 +187,69 @@ export default function Page() {
           padding: 24px;
           position: relative;
           overflow: hidden;
+          transition: background 0.6s ease;
+        }
+
+        .page.water {
           background:
-            radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.95), transparent 16%),
-            radial-gradient(circle at 75% 12%, rgba(117, 221, 255, 0.75), transparent 24%),
-            radial-gradient(circle at 50% 70%, rgba(0, 128, 255, 0.45), transparent 40%),
+            radial-gradient(circle at 20% 15%, rgba(255,255,255,0.95), transparent 16%),
+            radial-gradient(circle at 75% 12%, rgba(117,221,255,0.75), transparent 24%),
             linear-gradient(135deg, #e9fbff 0%, #86ddff 42%, #075a9f 100%);
+        }
+
+        .page.neon {
+          background:
+            radial-gradient(circle at 20% 15%, rgba(0,255,255,0.45), transparent 18%),
+            radial-gradient(circle at 80% 20%, rgba(255,0,255,0.45), transparent 25%),
+            linear-gradient(135deg, #030014 0%, #101041 45%, #001a35 100%);
+        }
+
+        .page.royal {
+          background:
+            radial-gradient(circle at 20% 12%, rgba(255,255,255,0.7), transparent 17%),
+            radial-gradient(circle at 80% 18%, rgba(255,196,0,0.55), transparent 25%),
+            linear-gradient(135deg, #fff7dc 0%, #d99d00 45%, #4d2500 100%);
+        }
+
+        .page.space {
+          background:
+            radial-gradient(circle at 25% 18%, rgba(255,255,255,0.8), transparent 2%),
+            radial-gradient(circle at 70% 30%, rgba(140,94,255,0.45), transparent 22%),
+            linear-gradient(135deg, #070a25 0%, #201258 45%, #02030f 100%);
+        }
+
+        .nextBtn {
+          position: fixed;
+          top: 18px;
+          right: 18px;
+          z-index: 20;
+          padding: 12px 18px;
+          border: 1px solid rgba(255,255,255,0.55);
+          border-radius: 999px;
+          color: white;
+          font-size: 14px;
+          font-weight: 900;
+          cursor: pointer;
+          background: rgba(255,255,255,0.18);
+          backdrop-filter: blur(16px);
+          box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+          transition: 0.25s ease;
+        }
+
+        .nextBtn:hover {
+          transform: translateY(-3px) scale(1.04);
+          background: rgba(255,255,255,0.3);
+        }
+
+        .counter {
+          position: fixed;
+          top: 68px;
+          right: 28px;
+          z-index: 20;
+          color: white;
+          font-size: 13px;
+          font-weight: 800;
+          opacity: 0.9;
         }
 
         .bg {
@@ -152,7 +262,7 @@ export default function Page() {
         .orb {
           position: absolute;
           border-radius: 50%;
-          filter: blur(12px);
+          filter: blur(14px);
           animation: floatOrb 8s ease-in-out infinite alternate;
         }
 
@@ -161,7 +271,7 @@ export default function Page() {
           height: 260px;
           left: 5%;
           top: 5%;
-          background: rgba(255, 255, 255, 0.65);
+          background: rgba(255,255,255,0.55);
         }
 
         .orb2 {
@@ -169,7 +279,7 @@ export default function Page() {
           height: 220px;
           right: 6%;
           top: 20%;
-          background: rgba(0, 195, 255, 0.35);
+          background: rgba(0,195,255,0.35);
           animation-delay: -3s;
         }
 
@@ -178,17 +288,13 @@ export default function Page() {
           height: 170px;
           left: 50%;
           bottom: 14%;
-          background: rgba(255, 255, 255, 0.28);
+          background: rgba(255,255,255,0.25);
           animation-delay: -5s;
         }
 
         @keyframes floatOrb {
-          from {
-            transform: translateY(0) scale(1);
-          }
-          to {
-            transform: translateY(-28px) scale(1.08);
-          }
+          from { transform: translateY(0) scale(1); }
+          to { transform: translateY(-28px) scale(1.08); }
         }
 
         .water {
@@ -199,22 +305,18 @@ export default function Page() {
           height: 47%;
           border-radius: 50% 50% 0 0;
           background:
-            radial-gradient(circle at 20% 10%, rgba(255,255,255,0.85), transparent 18%),
-            linear-gradient(180deg, rgba(255,255,255,0.4), rgba(0, 78, 160, 0.75));
+            radial-gradient(circle at 20% 10%, rgba(255,255,255,0.75), transparent 18%),
+            linear-gradient(180deg, rgba(255,255,255,0.35), rgba(0,78,160,0.55));
           transform: rotateX(62deg) translateY(65px);
           box-shadow:
-            inset 0 35px 80px rgba(255,255,255,0.5),
-            inset 0 -35px 90px rgba(0, 43, 110, 0.5);
+            inset 0 35px 80px rgba(255,255,255,0.38),
+            inset 0 -35px 90px rgba(0,43,110,0.45);
           animation: waterMove 5s ease-in-out infinite alternate;
         }
 
         @keyframes waterMove {
-          from {
-            transform: rotateX(62deg) translateY(76px) scaleX(1);
-          }
-          to {
-            transform: rotateX(62deg) translateY(48px) scaleX(1.04);
-          }
+          from { transform: rotateX(62deg) translateY(76px) scaleX(1); }
+          to { transform: rotateX(62deg) translateY(48px) scaleX(1.04); }
         }
 
         .wave {
@@ -241,16 +343,14 @@ export default function Page() {
           height: 220px;
           background: repeating-radial-gradient(
             ellipse at center,
-            rgba(255,255,255,0.2) 0 1px,
+            rgba(255,255,255,0.18) 0 1px,
             transparent 4px 20px
           );
           animation: waveFlow 14s linear infinite reverse;
         }
 
         @keyframes waveFlow {
-          to {
-            background-position: 230px 130px;
-          }
+          to { background-position: 230px 130px; }
         }
 
         .bubble {
@@ -258,7 +358,7 @@ export default function Page() {
           bottom: -80px;
           border-radius: 50%;
           background:
-            radial-gradient(circle at 30% 25%, #fff, rgba(255,255,255,0.24) 25%, rgba(0, 151, 255, 0.22) 70%);
+            radial-gradient(circle at 30% 25%, #fff, rgba(255,255,255,0.24) 25%, rgba(0,151,255,0.22) 70%);
           border: 1px solid rgba(255,255,255,0.7);
           box-shadow: inset 0 0 18px rgba(255,255,255,0.9);
           animation: bubbleUp linear infinite;
@@ -271,55 +371,30 @@ export default function Page() {
         .b5 { width: 16px; height: 16px; left: 92%; animation-duration: 10s; animation-delay: -5s; }
 
         @keyframes bubbleUp {
-          0% {
-            transform: translateY(0) scale(0.5);
-            opacity: 0;
-          }
-          15% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-120vh) scale(1.1);
-            opacity: 0;
-          }
+          0% { transform: translateY(0) scale(0.5); opacity: 0; }
+          15% { opacity: 1; }
+          100% { transform: translateY(-120vh) scale(1.1); opacity: 0; }
         }
 
-        .fish {
+        .shape {
           position: absolute;
-          left: -10%;
-          color: rgba(255,255,255,0.65);
-          font-size: 22px;
-          filter: drop-shadow(0 6px 8px rgba(0,64,120,0.25));
-          animation: fishSwim 13s linear infinite;
+          width: 52px;
+          height: 52px;
+          border-radius: 18px;
+          border: 1px solid rgba(255,255,255,0.45);
+          background: rgba(255,255,255,0.22);
+          box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+          transform: rotate(45deg);
+          animation: shapeFloat 6s ease-in-out infinite alternate;
         }
 
-        .fish::after {
-          content: "";
-          position: absolute;
-          right: -9px;
-          top: 7px;
-          width: 0;
-          height: 0;
-          border-left: 9px solid rgba(255,255,255,0.55);
-          border-top: 6px solid transparent;
-          border-bottom: 6px solid transparent;
-        }
+        .s1 { left: 12%; bottom: 17%; }
+        .s2 { right: 15%; bottom: 24%; width: 38px; height: 38px; animation-delay: -2s; }
+        .s3 { right: 28%; top: 16%; width: 44px; height: 44px; animation-delay: -4s; }
 
-        .fish1 {
-          top: 34%;
-        }
-
-        .fish2 {
-          top: 61%;
-          animation-duration: 17s;
-          animation-delay: -7s;
-          transform: scale(0.72);
-        }
-
-        @keyframes fishSwim {
-          to {
-            left: 112%;
-          }
+        @keyframes shapeFloat {
+          from { transform: translateY(0) rotate(45deg); }
+          to { transform: translateY(-20px) rotate(58deg); }
         }
 
         .card {
@@ -338,29 +413,26 @@ export default function Page() {
           -webkit-backdrop-filter: blur(25px) saturate(170%);
           box-shadow:
             inset 8px 8px 26px rgba(255,255,255,0.6),
-            inset -14px -14px 30px rgba(0, 91, 153, 0.24),
-            0 45px 110px rgba(0, 48, 91, 0.42),
+            inset -14px -14px 30px rgba(0,91,153,0.24),
+            0 45px 110px rgba(0,48,91,0.42),
             0 0 0 10px rgba(255,255,255,0.12);
-          animation: cardFloat 4s ease-in-out infinite alternate;
+          animation: cardIn 0.55s ease, cardFloat 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes cardIn {
+          from {
+            opacity: 0;
+            transform: translateX(80px) scale(0.92) rotateY(15deg);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1) rotateY(0deg);
+          }
         }
 
         @keyframes cardFloat {
-          from {
-            transform: translateY(0) rotateX(5deg) rotateY(-5deg);
-          }
-          to {
-            transform: translateY(-13px) rotateX(1deg) rotateY(5deg);
-          }
-        }
-
-        .card::before {
-          content: "";
-          position: absolute;
-          inset: 12px;
-          border-radius: 36px;
-          border: 1px solid rgba(255,255,255,0.45);
-          pointer-events: none;
-          box-shadow: inset 0 0 36px rgba(255,255,255,0.46);
+          from { transform: translateY(0) rotateX(5deg) rotateY(-5deg); }
+          to { transform: translateY(-13px) rotateX(1deg) rotateY(5deg); }
         }
 
         .shine {
@@ -376,17 +448,9 @@ export default function Page() {
         }
 
         @keyframes glassSweep {
-          0%, 45% {
-            transform: translateX(-40px) rotate(22deg);
-            opacity: 0;
-          }
-          65% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateX(620px) rotate(22deg);
-            opacity: 0;
-          }
+          0%, 45% { transform: translateX(-40px) rotate(22deg); opacity: 0; }
+          65% { opacity: 1; }
+          100% { transform: translateX(620px) rotate(22deg); opacity: 0; }
         }
 
         .notch {
@@ -394,8 +458,8 @@ export default function Page() {
           height: 20px;
           border-radius: 999px;
           margin: 0 auto 16px;
-          background: rgba(4, 54, 96, 0.18);
-          box-shadow: inset 0 2px 6px rgba(0, 35, 70, 0.22), 0 1px 0 rgba(255,255,255,0.58);
+          background: rgba(4,54,96,0.18);
+          box-shadow: inset 0 2px 6px rgba(0,35,70,0.22), 0 1px 0 rgba(255,255,255,0.58);
         }
 
         .badge {
@@ -408,10 +472,9 @@ export default function Page() {
           gap: 8px;
           color: rgba(6,61,102,0.82);
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 900;
           background: rgba(255,255,255,0.3);
           border: 1px solid rgba(255,255,255,0.65);
-          box-shadow: inset 0 0 12px rgba(255,255,255,0.5);
         }
 
         .badge span {
@@ -442,22 +505,13 @@ export default function Page() {
           overflow: visible;
         }
 
-        .dropLogo {
-          width: 58px;
-          height: 76px;
-          border-radius: 50% 50% 55% 55%;
-          background:
-            radial-gradient(circle at 32% 22%, rgba(255,255,255,0.95), transparent 22%),
-            linear-gradient(165deg, rgba(255,255,255,0.45), rgba(0,135,230,0.42));
-          border: 2px solid rgba(0,113,188,0.48);
-          box-shadow: inset 0 0 18px rgba(255,255,255,0.86);
+        .logoIcon {
+          font-size: 48px;
           animation: logoPulse 2.3s ease-in-out infinite alternate;
         }
 
         @keyframes logoPulse {
-          to {
-            transform: scale(1.07) translateY(-3px);
-          }
+          to { transform: scale(1.08) translateY(-4px); }
         }
 
         .ring {
@@ -483,14 +537,8 @@ export default function Page() {
         }
 
         @keyframes ringPulse {
-          0%, 100% {
-            transform: scale(0.88);
-            opacity: 0.55;
-          }
-          50% {
-            transform: scale(1.12);
-            opacity: 1;
-          }
+          0%, 100% { transform: scale(0.88); opacity: 0.55; }
+          50% { transform: scale(1.12); opacity: 1; }
         }
 
         h1 {
@@ -639,12 +687,8 @@ export default function Page() {
         }
 
         @keyframes liquidMove {
-          from {
-            transform: translateX(-6%) rotate(-2deg);
-          }
-          to {
-            transform: translateX(6%) rotate(2deg);
-          }
+          from { transform: translateX(-6%) rotate(-2deg); }
+          to { transform: translateX(6%) rotate(2deg); }
         }
 
         .divider {
@@ -727,11 +771,23 @@ export default function Page() {
             padding: 14px;
           }
 
+          .nextBtn {
+            top: 12px;
+            right: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+          }
+
+          .counter {
+            top: 58px;
+            right: 22px;
+          }
+
           .card {
             min-height: auto;
             padding: 22px;
             border-radius: 36px;
-            animation: none;
+            margin-top: 54px;
           }
 
           h1 {
@@ -751,7 +807,7 @@ export default function Page() {
             height: 63px;
           }
 
-          .fish {
+          .shape {
             display: none;
           }
         }
