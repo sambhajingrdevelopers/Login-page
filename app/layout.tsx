@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "3D Water Login",
-  description: "3D animated water login page",
+  title: "Multi Login Pages",
+  description: "Animated multiple login page demo",
 };
 
 export default function RootLayout({
